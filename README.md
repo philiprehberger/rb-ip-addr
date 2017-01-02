@@ -27,7 +27,7 @@ gem install philiprehberger-ip_addr
 ## Usage
 
 ```ruby
-require 'philiprehberger/ip_addr'
+require "philiprehberger/ip_addr"
 
 ip = Philiprehberger::IpAddr.parse('192.168.1.1')
 ip.v4?      # => true

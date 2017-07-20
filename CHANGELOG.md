@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-03-24
+
+### Fixed
+- Align README one-liner with gemspec summary
+- Fix stray character in CHANGELOG formatting
+
 ## [0.1.4] - 2026-03-24
 
 ### Fixed
@@ -18,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Installation section quote style to double quotes
 - Remove inline comments from Development section to match template
 
-n## [0.1.2] - 2026-03-22
+## [0.1.2] - 2026-03-22
 
 ### Changed
 - Update rubocop configuration for Windows compatibility

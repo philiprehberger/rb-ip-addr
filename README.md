@@ -4,7 +4,7 @@
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-ip_addr.svg)](https://rubygems.org/gems/philiprehberger-ip_addr)
 [![License](https://img.shields.io/github/license/philiprehberger/rb-ip-addr)](LICENSE)
 
-Enhanced IP address library with CIDR, classification, and range operations. Built on Ruby's stdlib `ipaddr`
+Enhanced IP address library with CIDR, classification, and range operations
 
 ## Requirements
 

@@ -97,11 +97,10 @@ module Philiprehberger
 
       # @return [Integer] number of addresses in the range
       def size
+        prefix = @network.prefix
         if @network.ipv4?
-          prefix = @network.prefix
           2**(32 - prefix)
         else
-          prefix = @network.prefix
           2**(128 - prefix)
         end
       end
@@ -147,7 +146,7 @@ module Philiprehberger
       end
 
       def int_to_v6(int)
-        groups = (0..7).map { |i| (int >> (112 - 16 * i)) & 0xFFFF }
+        groups = (0..7).map { |i| (int >> (112 - (16 * i))) & 0xFFFF }
         groups.map { |g| format('%x', g) }.join(':')
       end
     end

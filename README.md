@@ -2,8 +2,7 @@
 
 [![Tests](https://github.com/philiprehberger/rb-ip-addr/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rb-ip-addr/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-ip_addr.svg)](https://rubygems.org/gems/philiprehberger-ip_addr)
-[![License](https://img.shields.io/github/license/philiprehberger/rb-ip-addr)](LICENSE)
-[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
+[![Last updated](https://img.shields.io/github/last-commit/philiprehberger/rb-ip-addr)](https://github.com/philiprehberger/rb-ip-addr/commits/main)
 
 Enhanced IP address library with CIDR, classification, and range operations
 
@@ -89,6 +88,24 @@ bundle install
 bundle exec rspec
 bundle exec rubocop
 ```
+
+## Support
+
+If you find this project useful:
+
+⭐ [Star the repo](https://github.com/philiprehberger/rb-ip-addr)
+
+🐛 [Report issues](https://github.com/philiprehberger/rb-ip-addr/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+💡 [Suggest features](https://github.com/philiprehberger/rb-ip-addr/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+❤️ [Sponsor development](https://github.com/sponsors/philiprehberger)
+
+🌐 [All Open Source Projects](https://philiprehberger.com/open-source-packages)
+
+💻 [GitHub Profile](https://github.com/philiprehberger)
+
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/philiprehberger)
 
 ## License
 

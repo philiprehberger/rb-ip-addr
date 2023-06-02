@@ -12,14 +12,14 @@ Gem::Specification.new do |spec|
   spec.description = 'Parse and classify IPv4/IPv6 addresses with private, loopback, and multicast ' \
                      'detection. Supports CIDR range operations including size calculation, membership ' \
                      'testing, and enumeration. Built on Ruby stdlib ipaddr.'
-  spec.homepage      = 'https://philiprehberger.com/open-source-packages/ruby/philiprehberger-ip_addr'
+  spec.homepage = 'https://philiprehberger.com/open-source-packages/ruby/philiprehberger-ip_addr'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.1'
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri']       = 'https://github.com/philiprehberger/rb-ip-addr'
-  spec.metadata['changelog_uri']         = 'https://github.com/philiprehberger/rb-ip-addr/blob/main/CHANGELOG.md'
-  spec.metadata['bug_tracker_uri']       = 'https://github.com/philiprehberger/rb-ip-addr/issues'
+  spec.metadata['source_code_uri'] = 'https://github.com/philiprehberger/rb-ip-addr'
+  spec.metadata['changelog_uri'] = 'https://github.com/philiprehberger/rb-ip-addr/blob/main/CHANGELOG.md'
+  spec.metadata['bug_tracker_uri'] = 'https://github.com/philiprehberger/rb-ip-addr/issues'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.files = Dir['lib/**/*.rb', 'LICENSE', 'README.md', 'CHANGELOG.md']

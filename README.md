@@ -48,6 +48,15 @@ ip.multicast? # => true
 ip = Philiprehberger::IpAddr.parse('::1')
 ip.v6?      # => true
 ip.loopback? # => true
+
+ip = Philiprehberger::IpAddr.parse('169.254.1.1')
+ip.link_local? # => true
+
+ip = Philiprehberger::IpAddr.parse('10.0.0.1')
+ip.reserved?   # => true (private, loopback, multicast, or link-local)
+
+ip = Philiprehberger::IpAddr.parse('8.8.8.8')
+ip.reserved?   # => false
 ```
 
 ### CIDR Ranges
@@ -74,6 +83,8 @@ range.to_a.map(&:to_s)  # => ["10.0.0.0", "10.0.0.1", "10.0.0.2", "10.0.0.3"]
 | `Address#private?` | True if private/ULA address |
 | `Address#loopback?` | True if loopback address |
 | `Address#multicast?` | True if multicast address |
+| `Address#link_local?` | True if link-local address |
+| `Address#reserved?` | True if private, loopback, multicast, or link-local |
 | `Address#to_i` | Numeric representation |
 | `Address#to_s` | String representation |
 | `Range#size` | Number of addresses in range |

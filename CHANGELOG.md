@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-04-04
+
+### Added
+- `link_local?` method for detecting link-local addresses (169.254.0.0/16, fe80::/10)
+- `reserved?` method combining private, loopback, multicast, and link-local checks
+- GitHub issue template gem version field
+- Feature request "Alternatives considered" field
+
 ## [0.1.8] - 2026-03-31
 
 ### Added

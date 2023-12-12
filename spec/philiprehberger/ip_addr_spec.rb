@@ -94,6 +94,50 @@ RSpec.describe Philiprehberger::IpAddr do
       end
     end
 
+    describe '#link_local?' do
+      it 'detects IPv4 link-local' do
+        addr = described_class.new('169.254.1.1')
+        expect(addr.link_local?).to be true
+      end
+
+      it 'rejects non-link-local IPv4' do
+        addr = described_class.new('192.168.1.1')
+        expect(addr.link_local?).to be false
+      end
+
+      it 'detects IPv6 link-local' do
+        addr = described_class.new('fe80::1')
+        expect(addr.link_local?).to be true
+      end
+
+      it 'rejects non-link-local IPv6' do
+        addr = described_class.new('2001:db8::1')
+        expect(addr.link_local?).to be false
+      end
+    end
+
+    describe '#reserved?' do
+      it 'returns true for private addresses' do
+        expect(described_class.new('10.0.0.1').reserved?).to be true
+      end
+
+      it 'returns true for loopback' do
+        expect(described_class.new('127.0.0.1').reserved?).to be true
+      end
+
+      it 'returns true for multicast' do
+        expect(described_class.new('224.0.0.1').reserved?).to be true
+      end
+
+      it 'returns true for link-local' do
+        expect(described_class.new('169.254.0.1').reserved?).to be true
+      end
+
+      it 'returns false for public addresses' do
+        expect(described_class.new('8.8.8.8').reserved?).to be false
+      end
+    end
+
     describe '#to_i' do
       it 'returns numeric value for IPv4' do
         expect(described_class.new('0.0.0.1').to_i).to eq(1)

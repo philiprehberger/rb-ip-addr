@@ -59,6 +59,18 @@ ip = Philiprehberger::IpAddr.parse('8.8.8.8')
 ip.reserved?   # => false
 ```
 
+### Comparison and Arithmetic
+
+```ruby
+a = Philiprehberger::IpAddr.parse('10.0.0.1')
+b = Philiprehberger::IpAddr.parse('10.0.0.5')
+a < b       # => true
+a.succ.to_s # => "10.0.0.2"
+b.pred.to_s # => "10.0.0.4"
+
+[b, a].sort.map(&:to_s) # => ["10.0.0.1", "10.0.0.5"]
+```
+
 ### CIDR Ranges
 
 ```ruby
@@ -70,6 +82,19 @@ range.include?('10.0.1.1')    # => false
 range = Philiprehberger::IpAddr.range('10.0.0.0/30')
 range.each { |ip| puts ip }
 range.to_a.map(&:to_s)  # => ["10.0.0.0", "10.0.0.1", "10.0.0.2", "10.0.0.3"]
+```
+
+### Subnet Operations
+
+```ruby
+range = Philiprehberger::IpAddr.range('192.168.1.0/24')
+range.network.to_s   # => "192.168.1.0"
+range.broadcast.to_s # => "192.168.1.255"
+range.netmask        # => "255.255.255.0"
+range.prefix         # => 24
+
+other = Philiprehberger::IpAddr.range('192.168.1.128/25')
+range.overlap?(other) # => true
 ```
 
 ## API
@@ -87,10 +112,18 @@ range.to_a.map(&:to_s)  # => ["10.0.0.0", "10.0.0.1", "10.0.0.2", "10.0.0.3"]
 | `Address#reserved?` | True if private, loopback, multicast, or link-local |
 | `Address#to_i` | Numeric representation |
 | `Address#to_s` | String representation |
+| `Address#<=>(other)` | Compare addresses for sorting |
+| `Address#succ` | Next IP address |
+| `Address#pred` | Previous IP address |
 | `Range#size` | Number of addresses in range |
 | `Range#include?(ip)` | Check if address is in range |
 | `Range#each` | Iterate over all addresses |
 | `Range#to_a` | Array of all addresses |
+| `Range#network` | Network address of the CIDR block |
+| `Range#broadcast` | Broadcast/last address of the CIDR block |
+| `Range#prefix` | CIDR prefix length |
+| `Range#netmask` | Subnet mask (dotted-decimal for IPv4) |
+| `Range#overlap?(other)` | Check if two ranges share addresses |
 
 ## Development
 

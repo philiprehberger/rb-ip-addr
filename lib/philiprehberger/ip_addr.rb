@@ -9,6 +9,8 @@ module Philiprehberger
 
     # Parsed IP address wrapper
     class Address
+      include Comparable
+
       # @param ip_string [String] IP address string
       def initialize(ip_string)
         @raw = ip_string.to_s.strip
@@ -77,14 +79,35 @@ module Philiprehberger
         @addr.to_s
       end
 
-      # @return [Boolean] equality check
-      def ==(other)
-        return false unless other.is_a?(Address)
+      # @return [Integer, nil] comparison result
+      def <=>(other)
+        return nil unless other.is_a?(Address)
 
-        to_i == other.to_i
+        to_i <=> other.to_i
+      end
+
+      # @return [Address] next IP address
+      def succ
+        Address.new(@addr.ipv4? ? int_to_v4(to_i + 1) : int_to_v6(to_i + 1))
+      end
+
+      # @return [Address] previous IP address
+      def pred
+        raise Error, 'Cannot decrement below 0.0.0.0' if to_i.zero?
+
+        Address.new(@addr.ipv4? ? int_to_v4(to_i - 1) : int_to_v6(to_i - 1))
       end
 
       private
+
+      def int_to_v4(int)
+        [24, 16, 8, 0].map { |shift| (int >> shift) & 0xFF }.join('.')
+      end
+
+      def int_to_v6(int)
+        groups = (0..7).map { |i| (int >> (112 - (16 * i))) & 0xFFFF }
+        groups.map { |g| format('%x', g) }.join(':')
+      end
 
       def private_v4?
         [
@@ -113,12 +136,44 @@ module Philiprehberger
 
       # @return [Integer] number of addresses in the range
       def size
-        prefix = @network.prefix
         if @network.ipv4?
           2**(32 - prefix)
         else
           2**(128 - prefix)
         end
+      end
+
+      # @return [Address] network address (first address in the block)
+      def network
+        Address.new(@network.to_range.first.to_s)
+      end
+
+      # @return [Address] broadcast address (last address in the block)
+      def broadcast
+        Address.new(@network.to_range.last.to_s)
+      end
+
+      # @return [Integer] CIDR prefix length
+      def prefix
+        @network.prefix
+      end
+
+      # @return [String] subnet mask
+      def netmask
+        if @network.ipv4?
+          mask_int = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF
+          [24, 16, 8, 0].map { |shift| (mask_int >> shift) & 0xFF }.join('.')
+        else
+          "/#{prefix}"
+        end
+      end
+
+      # @param other [Range] another CIDR range
+      # @return [Boolean] true if the two ranges share any addresses
+      def overlap?(other)
+        raise Error, 'Argument must be a Range' unless other.is_a?(Range)
+
+        @network.include?(other.network.to_s) || other.include?(network.to_s)
       end
 
       # @param ip [Address, String] IP address to check

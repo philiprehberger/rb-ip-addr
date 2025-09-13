@@ -97,6 +97,21 @@ other = Philiprehberger::IpAddr.range('192.168.1.128/25')
 range.overlap?(other) # => true
 ```
 
+### Subnet splitting
+
+```ruby
+range = Philiprehberger::IpAddr.range('10.0.0.0/24')
+range.subnets(prefix: 26).map(&:to_s)
+# => ["10.0.0.0/26", "10.0.0.64/26", "10.0.0.128/26", "10.0.0.192/26"]
+
+range.subnets(prefix: 26).first.size # => 64
+
+v6 = Philiprehberger::IpAddr.range('2001:db8::/32')
+v6.subnets(prefix: 34).count # => 4
+
+range.subnets(prefix: 26) # => #<Enumerator: ...> when called without a block
+```
+
 ## API
 
 | Method | Description |
@@ -124,6 +139,7 @@ range.overlap?(other) # => true
 | `Range#prefix` | CIDR prefix length |
 | `Range#netmask` | Subnet mask (dotted-decimal for IPv4) |
 | `Range#overlap?(other)` | Check if two ranges share addresses |
+| `Range#subnets(prefix:)` | Yield equal-size child subnets at the given prefix length |
 
 ## Development
 

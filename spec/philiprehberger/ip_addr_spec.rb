@@ -336,5 +336,45 @@ RSpec.describe Philiprehberger::IpAddr do
         expect { a.overlap?('10.0.0.0/24') }.to raise_error(Philiprehberger::IpAddr::Error)
       end
     end
+
+    describe '#subnets' do
+      it 'splits an IPv4 /24 into four /26 subnets' do
+        range = described_class.range('10.0.0.0/24')
+        subnets = range.subnets(prefix: 26).to_a
+        expect(subnets.map(&:to_s)).to eq(
+          ['10.0.0.0/26', '10.0.0.64/26', '10.0.0.128/26', '10.0.0.192/26']
+        )
+        expect(subnets.map(&:size)).to eq([64, 64, 64, 64])
+      end
+
+      it 'splits an IPv4 /24 into two /25 subnets' do
+        range = described_class.range('10.0.0.0/24')
+        subnets = range.subnets(prefix: 25).to_a
+        expect(subnets.length).to eq(2)
+        expect(subnets.map(&:to_s)).to eq(['10.0.0.0/25', '10.0.0.128/25'])
+      end
+
+      it 'raises ArgumentError when prefix equals current prefix' do
+        range = described_class.range('10.0.0.0/24')
+        expect { range.subnets(prefix: 24) }.to raise_error(ArgumentError)
+      end
+
+      it 'raises ArgumentError when prefix exceeds IPv4 max' do
+        range = described_class.range('10.0.0.0/24')
+        expect { range.subnets(prefix: 33) }.to raise_error(ArgumentError)
+      end
+
+      it 'splits an IPv6 /32 into four /34 subnets' do
+        range = described_class.range('2001:db8::/32')
+        subnets = range.subnets(prefix: 34).to_a
+        expect(subnets.length).to eq(4)
+        expect(subnets.map(&:prefix)).to eq([34, 34, 34, 34])
+      end
+
+      it 'returns an Enumerator when no block given' do
+        range = described_class.range('10.0.0.0/24')
+        expect(range.subnets(prefix: 26)).to be_a(Enumerator)
+      end
+    end
   end
 end

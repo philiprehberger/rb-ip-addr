@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-03-22
+
+### Fixed
+
+- Remove trailing period from README description
+- Add bug_tracker_uri to gemspec
+
 ## [0.1.0] - 2026-03-22
 
 ### Added

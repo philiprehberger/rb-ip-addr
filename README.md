@@ -15,7 +15,7 @@ Enhanced IP address library with CIDR, classification, and range operations. Bui
 Add to your Gemfile:
 
 ```ruby
-gem 'philiprehberger-ip_addr'
+gem "philiprehberger-ip_addr"
 ```
 
 Or install directly:
@@ -85,8 +85,8 @@ range.to_a.map(&:to_s)  # => ["10.0.0.0", "10.0.0.1", "10.0.0.2", "10.0.0.3"]
 
 ```bash
 bundle install
-bundle exec rspec      # Run tests
-bundle exec rubocop    # Check code style
+bundle exec rspec
+bundle exec rubocop
 ```
 
 ## License

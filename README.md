@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/rb-ip-addr/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rb-ip-addr/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-ip_addr.svg)](https://rubygems.org/gems/philiprehberger-ip_addr)
 [![License](https://img.shields.io/github/license/philiprehberger/rb-ip-addr)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Enhanced IP address library with CIDR, classification, and range operations
 
@@ -91,4 +92,4 @@ bundle exec rubocop
 
 ## License
 
-MIT
+[MIT](LICENSE)

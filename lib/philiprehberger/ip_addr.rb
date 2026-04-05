@@ -51,6 +51,22 @@ module Philiprehberger
         end
       end
 
+      # @return [Boolean] true if this is a link-local address
+      def link_local?
+        if v4?
+          ::IPAddr.new('169.254.0.0/16').include?(@addr)
+        elsif v6?
+          ::IPAddr.new('fe80::/10').include?(@addr)
+        else
+          false
+        end
+      end
+
+      # @return [Boolean] true if this is any special-purpose address
+      def reserved?
+        private? || loopback? || multicast? || link_local?
+      end
+
       # @return [Integer] numeric representation of the address
       def to_i
         @addr.to_i

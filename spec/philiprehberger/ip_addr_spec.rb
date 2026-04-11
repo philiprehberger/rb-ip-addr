@@ -154,7 +154,7 @@ RSpec.describe Philiprehberger::IpAddr do
       end
     end
 
-    describe '#==' do
+    describe '#<=>' do
       it 'considers equal addresses equal' do
         a = described_class.new('10.0.0.1')
         b = described_class.new('10.0.0.1')
@@ -165,6 +165,58 @@ RSpec.describe Philiprehberger::IpAddr do
         a = described_class.new('10.0.0.1')
         b = described_class.new('10.0.0.2')
         expect(a).not_to eq(b)
+      end
+
+      it 'sorts addresses by numeric value' do
+        addrs = ['10.0.0.3', '10.0.0.1', '10.0.0.2'].map { |ip| described_class.new(ip) }
+        sorted = addrs.sort.map(&:to_s)
+        expect(sorted).to eq(['10.0.0.1', '10.0.0.2', '10.0.0.3'])
+      end
+
+      it 'supports comparison operators' do
+        a = described_class.new('10.0.0.1')
+        b = described_class.new('10.0.0.2')
+        expect(a).to be < b
+        expect(b).to be > a
+      end
+
+      it 'returns nil for non-Address' do
+        a = described_class.new('10.0.0.1')
+        expect(a <=> 'not an address').to be_nil
+      end
+    end
+
+    describe '#succ' do
+      it 'returns the next IPv4 address' do
+        addr = described_class.new('10.0.0.1')
+        expect(addr.succ.to_s).to eq('10.0.0.2')
+      end
+
+      it 'crosses octet boundaries' do
+        addr = described_class.new('10.0.0.255')
+        expect(addr.succ.to_s).to eq('10.0.1.0')
+      end
+
+      it 'returns the next IPv6 address' do
+        addr = described_class.new('::1')
+        expect(addr.succ.to_s).to eq('::2')
+      end
+    end
+
+    describe '#pred' do
+      it 'returns the previous IPv4 address' do
+        addr = described_class.new('10.0.0.2')
+        expect(addr.pred.to_s).to eq('10.0.0.1')
+      end
+
+      it 'crosses octet boundaries' do
+        addr = described_class.new('10.0.1.0')
+        expect(addr.pred.to_s).to eq('10.0.0.255')
+      end
+
+      it 'raises for 0.0.0.0' do
+        addr = described_class.new('0.0.0.0')
+        expect { addr.pred }.to raise_error(Philiprehberger::IpAddr::Error)
       end
     end
   end
@@ -209,6 +261,79 @@ RSpec.describe Philiprehberger::IpAddr do
     describe 'larger range' do
       it 'reports correct size for /24' do
         expect(described_class.range('192.168.1.0/24').size).to eq(256)
+      end
+    end
+
+    describe '#network' do
+      it 'returns the network address' do
+        range = described_class.range('192.168.1.0/24')
+        expect(range.network.to_s).to eq('192.168.1.0')
+      end
+
+      it 'returns the network address for a non-aligned CIDR' do
+        range = described_class.range('10.0.0.5/30')
+        expect(range.network.to_s).to eq('10.0.0.4')
+      end
+    end
+
+    describe '#broadcast' do
+      it 'returns the broadcast address for /24' do
+        range = described_class.range('192.168.1.0/24')
+        expect(range.broadcast.to_s).to eq('192.168.1.255')
+      end
+
+      it 'returns the last address for /30' do
+        range = described_class.range('10.0.0.0/30')
+        expect(range.broadcast.to_s).to eq('10.0.0.3')
+      end
+    end
+
+    describe '#prefix' do
+      it 'returns the prefix length' do
+        expect(described_class.range('10.0.0.0/24').prefix).to eq(24)
+      end
+
+      it 'returns 30 for /30' do
+        expect(described_class.range('10.0.0.0/30').prefix).to eq(30)
+      end
+    end
+
+    describe '#netmask' do
+      it 'returns dotted-decimal for IPv4 /24' do
+        expect(described_class.range('10.0.0.0/24').netmask).to eq('255.255.255.0')
+      end
+
+      it 'returns dotted-decimal for IPv4 /16' do
+        expect(described_class.range('172.16.0.0/16').netmask).to eq('255.255.0.0')
+      end
+
+      it 'returns prefix notation for IPv6' do
+        expect(described_class.range('fe80::/10').netmask).to eq('/10')
+      end
+    end
+
+    describe '#overlap?' do
+      it 'detects overlapping ranges' do
+        a = described_class.range('10.0.0.0/24')
+        b = described_class.range('10.0.0.128/25')
+        expect(a.overlap?(b)).to be true
+      end
+
+      it 'detects non-overlapping ranges' do
+        a = described_class.range('10.0.0.0/24')
+        b = described_class.range('10.0.1.0/24')
+        expect(a.overlap?(b)).to be false
+      end
+
+      it 'detects overlap when other contains self' do
+        a = described_class.range('10.0.0.0/25')
+        b = described_class.range('10.0.0.0/24')
+        expect(a.overlap?(b)).to be true
+      end
+
+      it 'raises for non-Range argument' do
+        a = described_class.range('10.0.0.0/24')
+        expect { a.overlap?('10.0.0.0/24') }.to raise_error(Philiprehberger::IpAddr::Error)
       end
     end
   end

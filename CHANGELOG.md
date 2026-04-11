@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-04-10
+
+### Added
+- `Address` now includes `Comparable` for sorting and comparison operators
+- `Address#succ` returns the next IP address
+- `Address#pred` returns the previous IP address
+- `Range#network` returns the network address of a CIDR block
+- `Range#broadcast` returns the broadcast/last address of a CIDR block
+- `Range#prefix` returns the CIDR prefix length
+- `Range#netmask` returns the subnet mask (dotted-decimal for IPv4)
+- `Range#overlap?` checks if two ranges share addresses
+
 ## [0.2.0] - 2026-04-04
 
 ### Added

@@ -205,6 +205,41 @@ module Philiprehberger
         each.to_a
       end
 
+      # @return [Boolean] true if this is an IPv4 range
+      def ipv4?
+        @network.ipv4?
+      end
+
+      # @return [Boolean] true if this is an IPv6 range
+      def ipv6?
+        @network.ipv6?
+      end
+
+      # Split the range into equal-size child subnets at the given prefix length
+      # @param prefix [Integer] the child subnet prefix length
+      # @yield [Range] each child subnet
+      # @return [Enumerator<Range>] if no block given
+      # @raise [ArgumentError] if prefix is not larger than the current prefix or exceeds the address family max
+      def subnets(prefix:)
+        max_prefix = ipv6? ? 128 : 32
+        unless prefix.is_a?(Integer) && prefix > @network.prefix && prefix <= max_prefix
+          raise ArgumentError,
+                "prefix must be an Integer greater than #{@network.prefix} and <= #{max_prefix}, got #{prefix.inspect}"
+        end
+
+        return enum_for(:subnets, prefix: prefix) unless block_given?
+
+        step = 2**(max_prefix - prefix)
+        start_int = @network.to_range.first.to_i
+        end_int = @network.to_range.last.to_i
+        int = start_int
+        while int <= end_int
+          addr = ipv4? ? int_to_v4(int) : int_to_v6(int)
+          yield Range.new("#{addr}/#{prefix}")
+          int += step
+        end
+      end
+
       # @return [String] string representation
       def to_s
         @cidr

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-18
+
+### Added
+- `Range#subnets(prefix:)` — yields equal-size child subnets at the given prefix length; supports both block and enumerator forms; raises `ArgumentError` on invalid prefix
+
 ## [0.3.0] - 2026-04-10
 
 ### Added

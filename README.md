@@ -112,6 +112,13 @@ v6.subnets(prefix: 34).count # => 4
 range.subnets(prefix: 26) # => #<Enumerator: ...> when called without a block
 ```
 
+### Bytes
+
+```ruby
+addr = Philiprehberger::IpAddr.parse("192.168.0.1")
+addr.to_bytes # => [192, 168, 0, 1]
+```
+
 ## API
 
 | Method | Description |
@@ -127,6 +134,7 @@ range.subnets(prefix: 26) # => #<Enumerator: ...> when called without a block
 | `Address#reserved?` | True if private, loopback, multicast, or link-local |
 | `Address#to_i` | Numeric representation |
 | `Address#to_s` | String representation |
+| `Address#to_bytes` | Octets (4 for IPv4, 16 for IPv6) |
 | `Address#<=>(other)` | Compare addresses for sorting |
 | `Address#succ` | Next IP address |
 | `Address#pred` | Previous IP address |

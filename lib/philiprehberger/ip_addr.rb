@@ -79,6 +79,15 @@ module Philiprehberger
         @addr.to_s
       end
 
+      # @return [Array<Integer>] octets of the address (4 bytes for IPv4, 16 bytes for IPv6)
+      def to_bytes
+        if v4?
+          [(to_i >> 24) & 0xff, (to_i >> 16) & 0xff, (to_i >> 8) & 0xff, to_i & 0xff]
+        else
+          Array.new(16) { |i| (to_i >> (8 * (15 - i))) & 0xff }
+        end
+      end
+
       # @return [Integer, nil] comparison result
       def <=>(other)
         return nil unless other.is_a?(Address)

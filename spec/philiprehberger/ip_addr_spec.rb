@@ -154,6 +154,37 @@ RSpec.describe Philiprehberger::IpAddr do
       end
     end
 
+    describe '#to_bytes' do
+      it 'returns four octets for an IPv4 address' do
+        bytes = described_class.new('192.168.0.1').to_bytes
+        expect(bytes).to eq([192, 168, 0, 1])
+        expect(bytes.length).to eq(4)
+      end
+
+      it 'returns four zero octets for 0.0.0.0' do
+        expect(described_class.new('0.0.0.0').to_bytes).to eq([0, 0, 0, 0])
+      end
+
+      it 'returns four 255 octets for 255.255.255.255' do
+        expect(described_class.new('255.255.255.255').to_bytes).to eq([255, 255, 255, 255])
+      end
+
+      it 'returns sixteen bytes for IPv6 ::1 with only the last byte set' do
+        bytes = described_class.new('::1').to_bytes
+        expect(bytes).to be_an(Array)
+        expect(bytes.length).to eq(16)
+        expect(bytes[0..14]).to eq([0] * 15)
+        expect(bytes.last).to eq(1)
+      end
+
+      it 'returns sixteen integer bytes for an IPv6 address' do
+        bytes = described_class.new('2001:db8::1').to_bytes
+        expect(bytes).to be_an(Array)
+        expect(bytes.length).to eq(16)
+        expect(bytes).to all(be_an(Integer))
+      end
+    end
+
     describe '#<=>' do
       it 'considers equal addresses equal' do
         a = described_class.new('10.0.0.1')

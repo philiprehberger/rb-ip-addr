@@ -100,6 +100,22 @@ module Philiprehberger
         Address.new(@addr.ipv4? ? int_to_v4(to_i + 1) : int_to_v6(to_i + 1))
       end
 
+      # Reverse-DNS PTR record name for this address.
+      #
+      # IPv4 addresses produce `<reversed-octets>.in-addr.arpa`. IPv6 addresses
+      # produce the canonical 32-nibble form ending in `.ip6.arpa`. Use this
+      # for PTR queries, log enrichment, and zone-file generation.
+      #
+      # @return [String] reverse-DNS pointer name
+      def to_ptr
+        if v4?
+          "#{to_bytes.reverse.join('.')}.in-addr.arpa"
+        else
+          nibbles = format('%032x', to_i).chars.reverse.join('.')
+          "#{nibbles}.ip6.arpa"
+        end
+      end
+
       # @return [Address] previous IP address
       def pred
         raise Error, 'Cannot decrement below 0.0.0.0' if to_i.zero?

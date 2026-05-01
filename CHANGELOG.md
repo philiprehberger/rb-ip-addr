@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-05-01
+
+### Added
+- `Address#to_ptr` — reverse-DNS PTR record name for an address. IPv4 produces `<reversed-octets>.in-addr.arpa`; IPv6 produces the canonical 32-nibble form ending in `.ip6.arpa`. Useful for PTR queries, log enrichment, and zone-file generation.
+
 ## [0.5.0] - 2026-04-19
 
 ### Added

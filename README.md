@@ -119,6 +119,16 @@ addr = Philiprehberger::IpAddr.parse("192.168.0.1")
 addr.to_bytes # => [192, 168, 0, 1]
 ```
 
+### Reverse DNS PTR
+
+```ruby
+Philiprehberger::IpAddr.parse("192.0.2.5").to_ptr
+# => "5.2.0.192.in-addr.arpa"
+
+Philiprehberger::IpAddr.parse("2001:db8::1").to_ptr
+# => "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa"
+```
+
 ## API
 
 | Method | Description |
@@ -135,6 +145,7 @@ addr.to_bytes # => [192, 168, 0, 1]
 | `Address#to_i` | Numeric representation |
 | `Address#to_s` | String representation |
 | `Address#to_bytes` | Octets (4 for IPv4, 16 for IPv6) |
+| `Address#to_ptr` | Reverse-DNS PTR record name (`*.in-addr.arpa` or `*.ip6.arpa`) |
 | `Address#<=>(other)` | Compare addresses for sorting |
 | `Address#succ` | Next IP address |
 | `Address#pred` | Previous IP address |

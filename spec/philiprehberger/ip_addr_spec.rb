@@ -250,6 +250,28 @@ RSpec.describe Philiprehberger::IpAddr do
         expect { addr.pred }.to raise_error(Philiprehberger::IpAddr::Error)
       end
     end
+
+    describe '#to_ptr' do
+      it 'produces in-addr.arpa for IPv4' do
+        expect(described_class.new('192.0.2.5').to_ptr).to eq('5.2.0.192.in-addr.arpa')
+      end
+
+      it 'produces in-addr.arpa for the IPv4 loopback' do
+        expect(described_class.new('127.0.0.1').to_ptr).to eq('1.0.0.127.in-addr.arpa')
+      end
+
+      it 'produces ip6.arpa for IPv6' do
+        ptr = described_class.new('2001:db8::1').to_ptr
+        expect(ptr).to end_with('.ip6.arpa')
+        expect(ptr.split('.').size).to eq(34) # 32 nibbles + ip6 + arpa
+      end
+
+      it 'produces correct ip6.arpa for IPv6 loopback' do
+        ptr = described_class.new('::1').to_ptr
+        expect(ptr).to start_with('1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0')
+        expect(ptr).to end_with('.ip6.arpa')
+      end
+    end
   end
 
   describe '.range' do
